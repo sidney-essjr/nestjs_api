@@ -8,8 +8,8 @@ import {
   Put,
   UseGuards,
 } from '@nestjs/common';
-import { ParamId } from 'src/decorators/param-id.decoratos';
-import { Roles } from 'src/decorators/role.decoratos';
+import { ParamId } from 'src/decorators/param-id.decorator';
+import { Roles } from 'src/decorators/role.decorator';
 import { Role } from 'src/enums/role.enums';
 import { RoleGuard } from 'src/guards/role.guard';
 import { CreateUserDTO } from './dto/create-user.dto';

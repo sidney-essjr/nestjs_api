@@ -1,0 +1,15 @@
+{
+    "keep": {
+        "days": true,
+        "amount": 30
+    },
+    "auditLog": "C:\\Users\\sidney.souza\\OneDrive - Compass UOL\\Documentos\\Pessoal\\Dev\\Node\\api\\.3de68647b644ea806c61cdacc0b7b379e23ee0e9-audit.json",
+    "files": [
+        {
+            "date": 1728996912182,
+            "name": "C:\\Users\\sidney.souza\\OneDrive - Compass UOL\\Documentos\\Pessoal\\Dev\\Node\\api\\logsapplication-2024-10-15.log",
+            "hash": "48c7adb28e04bfdfeae3a6772bf3f8fc67529a5038b2468785a0ef878a5108b3"
+        }
+    ],
+    "hashType": "sha256"
+}

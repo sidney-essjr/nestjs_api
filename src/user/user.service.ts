@@ -1,33 +1,35 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { InjectRepository } from '@nestjs/typeorm';
+import * as bcrypt from 'bcrypt';
+import { Repository } from 'typeorm';
 import { CreateUserDTO } from './dto/create-user.dto';
 import { UpdatePatchUserDTO } from './dto/update-patch-user.dto';
 import { UpdatePutUserDTO } from './dto/update-put-user.dto';
-import * as bcrypt from 'bcrypt';
+import { User } from './entity/user.entity';
 
 @Injectable()
 export class UserService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    @InjectRepository(User)
+    private readonly userRepository: Repository<User>,
+  ) {}
 
   async create(data: CreateUserDTO) {
     const salt = await bcrypt.genSalt();
 
     data.password = await bcrypt.hash(data.password, salt);
-    return this.prisma.users.create({
-      data,
-    });
+    const newUser = this.userRepository.create(data);
+    return this.userRepository.save(newUser);
   }
 
   async readAll() {
-    return this.prisma.users.findMany();
+    return this.userRepository.find();
   }
 
   async read(id: number) {
     await this.exists(id);
-    return this.prisma.users.findUnique({
-      where: {
-        id,
-      },
+    return this.userRepository.findOneBy({
+      id,
     });
   }
 
@@ -36,7 +38,7 @@ export class UserService {
 
     data.password = await bcrypt.hash(data.password, bcrypt.genSaltSync());
 
-    await this.prisma.users.update({ data, where: { id } });
+    await this.userRepository.update(id, data);
   }
 
   async partialUpdate(id: number, data: UpdatePatchUserDTO) {
@@ -45,16 +47,16 @@ export class UserService {
     if (data.password)
       data.password = await bcrypt.hash(data.password, bcrypt.genSaltSync());
 
-    await this.prisma.users.update({ data, where: { id } });
+    await this.userRepository.update(id, data);
   }
 
   async delete(id: number) {
     await this.exists(id);
-    await this.prisma.users.delete({ where: { id } });
+    await this.userRepository.delete(id);
   }
 
   async exists(id: number) {
-    const data = await this.prisma.users.count({ where: { id } });
+    const data = await this.userRepository.count({ where: { id } });
     if (!data) {
       throw new NotFoundException();
     }

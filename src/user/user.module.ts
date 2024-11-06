@@ -5,14 +5,15 @@ import {
   NestModule,
   RequestMethod,
 } from '@nestjs/common';
-import { PrismaModule } from 'src/prisma/prisma.module';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { AuthModule } from 'src/auth/auth.module';
+import { UserIdCheckMiddleware } from 'src/middlewares/user-id-check.middleware';
+import { User } from './entity/user.entity';
 import { UserController } from './user.controller';
 import { UserService } from './user.service';
-import { UserIdCheckMiddleware } from 'src/middlewares/user-id-check.middleware';
-import { AuthModule } from 'src/auth/auth.module';
 
 @Module({
-  imports: [PrismaModule, forwardRef(() => AuthModule)],
+  imports: [forwardRef(() => AuthModule), TypeOrmModule.forFeature([User])],
   controllers: [UserController],
   providers: [UserService],
   exports: [UserService],
